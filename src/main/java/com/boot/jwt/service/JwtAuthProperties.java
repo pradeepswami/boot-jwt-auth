@@ -1,6 +1,8 @@
 package com.boot.jwt.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,6 +18,7 @@ public class JwtAuthProperties {
 	private String alias;
 	private String algo;
 	private int expSeconds = 120;
+	private List<String> excludePaths = new ArrayList<>();
 	private Map<String, String> trustedAppKeys = new HashMap<String, String>();
 
 	public String getAppName() {
@@ -92,6 +95,14 @@ public class JwtAuthProperties {
 
 	public void setExpSeconds(int expSeconds) {
 		this.expSeconds = expSeconds;
+	}
+
+	public List<String> getExcludePaths() {
+		return excludePaths;
+	}
+
+	public void setExcludePaths(List<String> excludePaths) {
+		this.excludePaths = excludePaths;
 	}
 
 }

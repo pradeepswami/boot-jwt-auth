@@ -44,7 +44,7 @@ public class JwtAuthAutoConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
-				.antMatchers("/**").authenticated();
+				.antMatchers("/**").permitAll();
 	}
 
 }
