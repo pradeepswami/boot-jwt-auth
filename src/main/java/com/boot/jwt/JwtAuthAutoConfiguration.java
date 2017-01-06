@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.boot.jwt.security.JwtAuthenticationFilter;
 import com.boot.jwt.security.JwtAuthenticationProvider;
+import com.boot.jwt.security.TokenAuthenticationEntryPoint;
 import com.boot.jwt.service.JwtAuthProperties;
 import com.boot.jwt.service.JwtService;
 import com.boot.jwt.service.KeyStoreAdapter;
@@ -43,8 +44,11 @@ public class JwtAuthAutoConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
-				.antMatchers("/**").permitAll();
-	}
+		// formatter:off
+		http.exceptionHandling().authenticationEntryPoint(new TokenAuthenticationEntryPoint());
 
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
+				.antMatchers("/**");
+		// formatter:on
+	}
 }

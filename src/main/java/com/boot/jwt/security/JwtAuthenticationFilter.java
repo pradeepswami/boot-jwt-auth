@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,11 +55,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 			throws AuthenticationException, IOException, ServletException {
 
 		String authHeader = request.getHeader("Authorization");
-
-		if (!StringUtils.startsWith(authHeader, "Bearer ")) {
-			// throw new
-			// RuntimeException("No JWT token found in request header");
-		}
 		String jwt = StringUtils.substringAfter(authHeader, "Bearer ");
 
 		JwtAuthenticationToken authRequest = new JwtAuthenticationToken(jwt);
@@ -85,6 +81,14 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 			return false;
 		}
 		return super.requiresAuthentication(request, response);
+	}
+
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			FilterChain chain, Authentication authResult) throws IOException, ServletException {
+		// call super to update context
+		super.successfulAuthentication(request, response, chain, authResult);
+		chain.doFilter(request, response);
 	}
 
 }

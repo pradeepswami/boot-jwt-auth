@@ -40,7 +40,7 @@ public class JwtService {
 		//@formatter:off
 		Jwt<Header, Claims> token = Jwts.parser()
 		.setSigningKeyResolver(keyStoreAdapter.getSigningKeyResolver())
-		.parseClaimsJwt(jwt);
+		.parse(jwt);
 		//@formatter:on
 
 		return token;

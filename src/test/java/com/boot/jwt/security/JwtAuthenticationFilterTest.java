@@ -1,5 +1,8 @@
 package com.boot.jwt.security;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import org.junit.Before;
@@ -27,11 +30,14 @@ public class JwtAuthenticationFilterTest {
 	public void testGenerateMatcher() throws Exception {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
+
+		RequestMatcher requestMatcher = testObject.generateExcludeMatcher(Arrays.asList("/info", "/**/app/**"));
 		request.setServletPath("/info");
-
-		RequestMatcher requestMatcher = testObject.generateExcludeMatcher(Arrays.asList("/info", "/app/**"));
-
-		System.err.println(requestMatcher.matches(request));
+		assertTrue(requestMatcher.matches(request));
+		request.setServletPath("/app");
+		assertTrue(requestMatcher.matches(request));
+		request.setServletPath("/test");
+		assertFalse(requestMatcher.matches(request));
 
 	}
 

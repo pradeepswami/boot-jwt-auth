@@ -68,6 +68,7 @@ public class KeyStoreAdapter {
 				Certificate certificate = store.getCertificate(entry.getValue());
 				if (certificate == null) {
 					LOG.warn("No certificate found for appId {}, alias {}", entry.getKey(), entry.getValue());
+					continue;
 				}
 				PublicKey pk = certificate.getPublicKey();
 				keyMap.put(entry.getKey(), pk);
