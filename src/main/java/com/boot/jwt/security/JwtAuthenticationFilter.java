@@ -24,10 +24,14 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.boot.jwt.service.JwtAuthProperties;
+import com.boot.jwt.configuration.JwtAuthProperties;
 
 @Component
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+
+	public static final String BEARER = "Bearer ";
+
+	public static final String AUTHORIZATION = "Authorization";
 
 	private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -54,8 +58,8 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 
-		String authHeader = request.getHeader("Authorization");
-		String jwt = StringUtils.substringAfter(authHeader, "Bearer ");
+		String authHeader = request.getHeader(AUTHORIZATION);
+		String jwt = StringUtils.substringAfter(authHeader, BEARER);
 
 		JwtAuthenticationToken authRequest = new JwtAuthenticationToken(jwt);
 		return getAuthenticationManager().authenticate(authRequest);
@@ -86,7 +90,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			FilterChain chain, Authentication authResult) throws IOException, ServletException {
-		// call super to update context
+		// call super to update auth in context
 		super.successfulAuthentication(request, response, chain, authResult);
 		chain.doFilter(request, response);
 	}

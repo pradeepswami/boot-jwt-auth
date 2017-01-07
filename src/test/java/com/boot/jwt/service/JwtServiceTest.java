@@ -29,6 +29,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.boot.jwt.configuration.JwtAuthProperties;
+
 @RunWith(MockitoJUnitRunner.class)
 public class JwtServiceTest {
 	@Spy

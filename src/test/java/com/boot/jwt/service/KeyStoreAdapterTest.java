@@ -13,7 +13,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.ClassPathResource;
 
-import com.boot.jwt.service.JwtAuthProperties;
+import com.boot.jwt.configuration.JwtAuthProperties;
 import com.boot.jwt.service.KeyStoreAdapter;
 import com.google.common.collect.ImmutableMap;
 

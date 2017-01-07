@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -13,6 +15,8 @@ import com.boot.jwt.service.JwtService;
 
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
+	private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
+
 	private JwtService jwtService;
 
 	@Override
@@ -20,7 +24,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		Assert.isInstanceOf(JwtAuthenticationToken.class, authentication);
 		JwtAuthenticationToken authToken = (JwtAuthenticationToken) authentication;
 
-		Jwt<Header, Claims> jwt = jwtService.paserJwt(authToken.getToken());
+		Jwt<Header, Claims> jwt = null;
+		try {
+			jwt = jwtService.paserJwt(authToken.getToken());
+		} catch (Exception e) {
+			LOG.error("JWT authentication failed.", e);
+			throw new JwtAuthenticationException(e.getMessage(), e);
+		}
 
 		return createAuthentication(jwt, authToken.getToken());
 	}
