@@ -1,22 +1,12 @@
 package com.boot.jwt.service;
 
 import com.boot.jwt.key.Keystore;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SigningKeyResolver;
-import io.jsonwebtoken.SigningKeyResolverAdapter;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -30,22 +20,8 @@ public class JwtService {
     private int expSecond;
     private SignatureAlgorithm algo;
     private Keystore keystore;
+    private SigningKeyResolver signingKeyResolver;
     private String instanceId;
-
-
-    private final SigningKeyResolver signingKeyResolver = new SigningKeyResolverAdapter() {
-        @Override
-        public Key resolveSigningKey(JwsHeader header, Claims claims) {
-
-            String instanceId = claims.getId();
-            String appName = claims.getIssuer();
-            Key key = keystore.getAppPublicKey(appName, instanceId);
-            if (key == null) {
-                throw new PublicKeyNotFound(appName, instanceId);
-            }
-            return key;
-        }
-    };
 
 
     private JwtService() {
@@ -89,8 +65,8 @@ public class JwtService {
         private String instanceId;
         private int expSecond = 120;
         private String algo = RSA;
-        private String secret;
         private Keystore keystore;
+        private SigningKeyResolver signingKeyResolver;
 
         private JwtServiceBuilder() {
         }
@@ -120,13 +96,13 @@ public class JwtService {
             return this;
         }
 
-        public JwtServiceBuilder secret(String secret) {
-            this.secret = secret;
+        public JwtServiceBuilder keystore(Keystore keystore) {
+            this.keystore = keystore;
             return this;
         }
 
-        public JwtServiceBuilder keystore(Keystore keystore) {
-            this.keystore = keystore;
+        public JwtServiceBuilder signingKeyResolver(SigningKeyResolver signingKeyResolver) {
+            this.signingKeyResolver = signingKeyResolver;
             return this;
         }
 
@@ -150,11 +126,8 @@ public class JwtService {
             jwtService.appName = this.appName;
             jwtService.expSecond = this.expSecond;
             jwtService.instanceId = this.instanceId;
-
-            if (this.keystore == null) {
-                throw new IllegalArgumentException("Keystore is required");
-            }
             jwtService.keystore = this.keystore;
+            jwtService.signingKeyResolver = this.signingKeyResolver;
             if (RSA.equalsIgnoreCase(this.algo)) {
                 jwtService.algo = SignatureAlgorithm.RS256;
             } else {

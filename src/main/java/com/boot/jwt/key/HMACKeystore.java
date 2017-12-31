@@ -1,18 +1,22 @@
 package com.boot.jwt.key;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.TextCodec;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 
 public class HMACKeystore implements Keystore {
 
-    private String secret;
     private Key secretKey;
 
-    public HMACKeystore(String secret) {
-        this.secret = secret;
+    public HMACKeystore(String base64Key) {
+        byte[] decodedKey = TextCodec.BASE64.decode(base64Key);
+        secretKey = new SecretKeySpec(decodedKey, SignatureAlgorithm.HS256.getJcaName());
+    }
+
+    public HMACKeystore(Key key) {
+        this.secretKey = key;
     }
 
     @Override
@@ -31,8 +35,4 @@ public class HMACKeystore implements Keystore {
         return secretKey;
     }
 
-    public void init() {
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secret);
-        secretKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
-    }
 }
