@@ -1,6 +1,6 @@
 package com.boot.jwt.security;
 
-import com.boot.jwt.core.JJwtServiceImpl;
+import com.boot.jwt.core.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
@@ -15,7 +15,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
 
-    private JJwtServiceImpl JJwtServiceImpl;
+    private JwtService jwtService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -24,7 +24,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
         Jwt<Header, Claims> jwt = null;
         try {
-            jwt = JJwtServiceImpl.paserJwt(authToken.getToken());
+            jwt = jwtService.paserJwt(authToken.getToken());
         } catch (Exception e) {
             LOG.error("JWT authentication failed.", e);
             throw new JwtAuthenticationException(e.getMessage(), e);
@@ -44,8 +44,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     }
 
-    public void setJJwtServiceImpl(JJwtServiceImpl JJwtServiceImpl) {
-        this.JJwtServiceImpl = JJwtServiceImpl;
+    public void setJwtService(JwtService jwtService) {
+        this.jwtService = jwtService;
     }
-
 }

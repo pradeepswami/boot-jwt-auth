@@ -1,6 +1,6 @@
 package com.boot.jwt.configuration;
 
-import com.boot.jwt.core.JJwtServiceImpl;
+import com.boot.jwt.core.JwtService;
 import com.boot.jwt.security.JwtAuthenticationFilter;
 import com.boot.jwt.security.JwtAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private JJwtServiceImpl JJwtServiceImpl;
+    private JwtService jwtService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -29,7 +29,7 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider();
-        provider.setJJwtServiceImpl(JJwtServiceImpl);
+        provider.setJwtService(jwtService);
         auth.authenticationProvider(provider);
     }
 

@@ -35,7 +35,7 @@ public class DiscoveryPublicKeyRegistryTest {
     public void getPublicKey_typical() throws Exception {
         Mockito.when(mockDiscoveryClient.getInstances(APP_ID)).thenReturn(Arrays.asList(createInstance()));
 
-        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(APP_ID, INSTANCE_ID);
+        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(INSTANCE_ID);
 
         assertThat(rstKey, notNullValue());
         assertThat(rstKey.getAlgorithm(), equalTo("RSA"));
@@ -45,7 +45,7 @@ public class DiscoveryPublicKeyRegistryTest {
     public void getPublicKey_emptyInstance() throws Exception {
         Mockito.when(mockDiscoveryClient.getInstances(APP_ID)).thenReturn(Collections.EMPTY_LIST);
 
-        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(APP_ID, INSTANCE_ID);
+        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(INSTANCE_ID);
 
         assertThat(rstKey, nullValue());
     }

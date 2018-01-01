@@ -27,9 +27,9 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
     }
 
     @Override
-    public PublicKey getPublicKey(String applicationId, String instanceId) {
-        LOG.info("Getting public core for {}, Instance id -> {}", applicationId, instanceId);
-        List<ServiceInstance> instances = discoveryClient.getInstances(applicationId);
+    public PublicKey getPublicKey(String instanceId) {
+        LOG.info("Getting public key for instance id -> {}", instanceId);
+        List<ServiceInstance> instances = discoveryClient.getInstances(instanceId);
         PublicKey publicKey = null;
         Optional<ServiceInstance> firstItem = instances.stream()
                 .filter(ins -> ins.getServiceId().equalsIgnoreCase(instanceId))
@@ -43,7 +43,7 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
                 KeyFactory kf = KeyFactory.getInstance("RSA");
                 publicKey = kf.generatePublic(X509publicKey);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                LOG.error("Unable to extract public key for " + applicationId + " - " + applicationId, e);
+                LOG.error("Unable to extract public key for instance id " + instanceId, e);
             }
         }
 
