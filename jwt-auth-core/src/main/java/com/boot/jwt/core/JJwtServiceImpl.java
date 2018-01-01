@@ -124,18 +124,18 @@ public class JJwtServiceImpl implements JwtService {
             if (StringUtils.isBlank(this.instanceId)) {
                 this.instanceId = this.appName;
             }
-            JJwtServiceImpl JJwtServiceImpl = new JJwtServiceImpl();
-            JJwtServiceImpl.appName = this.appName;
-            JJwtServiceImpl.expSecond = this.expSecond;
-            JJwtServiceImpl.instanceId = this.instanceId;
-            JJwtServiceImpl.keystore = this.keystore;
-            JJwtServiceImpl.signingKeyResolver = this.signingKeyResolver;
+            JJwtServiceImpl jjwtServiceImpl = new JJwtServiceImpl();
+            jjwtServiceImpl.appName = this.appName;
+            jjwtServiceImpl.expSecond = this.expSecond;
+            jjwtServiceImpl.instanceId = this.instanceId;
+            jjwtServiceImpl.keystore = this.keystore;
+            jjwtServiceImpl.signingKeyResolver = this.signingKeyResolver;
             if (RSA.equalsIgnoreCase(this.algo)) {
-                JJwtServiceImpl.algo = SignatureAlgorithm.RS256;
+                jjwtServiceImpl.algo = SignatureAlgorithm.RS256;
             } else {
-                JJwtServiceImpl.algo = SignatureAlgorithm.HS256;
+                jjwtServiceImpl.algo = SignatureAlgorithm.HS256;
             }
-            return JJwtServiceImpl;
+            return jjwtServiceImpl;
         }
     }
 }
