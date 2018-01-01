@@ -58,8 +58,7 @@ public class JJwtServiceImpl implements JwtService {
         LOG.debug("Validating JWT token -> {}", jwt);
         JwtParser jwtParser = Jwts.parser();
         jwtParser.setSigningKeyResolver(signingKeyResolver);
-        Jwt<Header, Claims> token = jwtParser.parse(jwt);
-        return token;
+        return jwtParser.parse(jwt);
     }
 
     public static class JwtServiceBuilder {
