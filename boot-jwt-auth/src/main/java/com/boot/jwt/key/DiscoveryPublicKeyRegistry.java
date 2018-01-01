@@ -43,7 +43,7 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
                 KeyFactory kf = KeyFactory.getInstance("RSA");
                 publicKey = kf.generatePublic(X509publicKey);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                LOG.error("Unable to extract public core for " + applicationId + " - " + applicationId, e);
+                LOG.error("Unable to extract public key for " + applicationId + " - " + applicationId, e);
             }
         }
 
