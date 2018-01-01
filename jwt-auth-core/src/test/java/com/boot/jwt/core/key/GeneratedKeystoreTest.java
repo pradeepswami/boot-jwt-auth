@@ -8,18 +8,18 @@ import java.security.PublicKey;
 
 public class GeneratedKeystoreTest {
 
-    private com.boot.jwt.core.key.RSAKeystore RSAKeystore;
+    private GenratedRSAKeystore GenratedRSAKeystore;
 
 
     @Before
     public void setUp() throws Exception {
-        RSAKeystore = new RSAKeystore();
-        RSAKeystore.init();
+        GenratedRSAKeystore = new GenratedRSAKeystore();
+        GenratedRSAKeystore.init();
     }
 
     @Test
     public void getPublicKey_typical() throws Exception {
-        PublicKey publicKey = RSAKeystore.getPublicKey();
+        PublicKey publicKey = GenratedRSAKeystore.getPublicKey();
         Assert.assertNotNull(publicKey);
     }
 

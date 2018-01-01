@@ -4,5 +4,5 @@ import java.security.PublicKey;
 
 public interface PublicKeyRegistry {
 
-    PublicKey getPublicKey(String applicationId, String instanceId);
+    PublicKey getPublicKey(String instanceId);
 }

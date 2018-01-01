@@ -8,19 +8,19 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-public class RSAKeystore implements Keystore {
+public class GenratedRSAKeystore implements Keystore {
 
-    private final static Logger LOG = LoggerFactory.getLogger(RSAKeystore.class);
+    private final static Logger LOG = LoggerFactory.getLogger(GenratedRSAKeystore.class);
 
     public static final int KEY_SIZE_IN_BITS = 2048;
     private KeyPair generateKeyPair;
 
     private PublicKeyRegistry publicKeyRegistry;
 
-    public RSAKeystore() {
+    public GenratedRSAKeystore() {
     }
 
-    public RSAKeystore(PublicKeyRegistry publicKeyRegistry) {
+    public GenratedRSAKeystore(PublicKeyRegistry publicKeyRegistry) {
         this.publicKeyRegistry = publicKeyRegistry;
     }
 
@@ -30,12 +30,12 @@ public class RSAKeystore implements Keystore {
     }
 
     @Override
-    public PublicKey getAppPublicKey(String applicationName, String instanceId) {
+    public PublicKey getAppPublicKey(String appInstanceId) {
         if (publicKeyRegistry == null) {
             LOG.warn("No PublicKeyRegistry registered");
             return null;
         }
-        return publicKeyRegistry.getPublicKey(applicationName, instanceId);
+        return publicKeyRegistry.getPublicKey(appInstanceId);
     }
 
     @Override

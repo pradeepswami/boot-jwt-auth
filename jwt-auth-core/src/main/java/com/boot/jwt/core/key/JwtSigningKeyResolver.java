@@ -17,7 +17,6 @@ public class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
     @Override
     public Key resolveSigningKey(JwsHeader header, Claims claims) {
         String instanceId = claims.getId();
-        String appName = claims.getIssuer();
-        return keystore.getAppPublicKey(appName, instanceId);
+        return keystore.getAppPublicKey(instanceId);
     }
 }
