@@ -3,10 +3,14 @@ package com.boot.jwt.core.key;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.SigningKeyResolverAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.Key;
 
 public class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JwtSigningKeyResolver.class);
 
     private Keystore keystore;
 
@@ -17,6 +21,8 @@ public class JwtSigningKeyResolver extends SigningKeyResolverAdapter {
     @Override
     public Key resolveSigningKey(JwsHeader header, Claims claims) {
         String instanceId = claims.getId();
-        return keystore.getAppPublicKey(instanceId);
+        String appName = claims.getIssuer();
+        LOG.debug("Resolving public key for app {} -> instance id {}", appName, instanceId);
+        return keystore.getAppPublicKey(new AppMetadata(appName, instanceId));
     }
 }

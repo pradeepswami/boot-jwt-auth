@@ -43,7 +43,7 @@ public class JksPublicKeyRegistry implements PublicKeyRegistry {
     }
 
     @Override
-    public PublicKey getPublicKey(String appInstanceId) {
-        return KEY_MAP.get(StringUtils.lowerCase(appInstanceId));
+    public PublicKey getPublicKey(AppMetadata appMetadata) {
+        return KEY_MAP.get(StringUtils.lowerCase(appMetadata.getInstanceId()));
     }
 }

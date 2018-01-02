@@ -5,11 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Key;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 import java.security.cert.CertificateException;
 
 public class JksKeystore implements Keystore {
@@ -40,12 +36,12 @@ public class JksKeystore implements Keystore {
     }
 
     @Override
-    public Key getAppPublicKey(String appInstanceId) {
+    public Key getAppPublicKey(AppMetadata appMetadata) {
         if (this.publicKeyRegistry == null) {
             LOG.warn("Public Key Registry is not set. Using JksKeystore public key");
             return publicKey;
         }
-        return publicKeyRegistry.getPublicKey(appInstanceId);
+        return publicKeyRegistry.getPublicKey(appMetadata);
     }
 
     @Override

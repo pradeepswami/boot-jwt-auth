@@ -30,12 +30,12 @@ public class GenratedRSAKeystore implements Keystore {
     }
 
     @Override
-    public PublicKey getAppPublicKey(String appInstanceId) {
+    public PublicKey getAppPublicKey(AppMetadata appMetadata) {
         if (publicKeyRegistry == null) {
             LOG.warn("No PublicKeyRegistry registered");
             return null;
         }
-        return publicKeyRegistry.getPublicKey(appInstanceId);
+        return publicKeyRegistry.getPublicKey(appMetadata);
     }
 
     @Override

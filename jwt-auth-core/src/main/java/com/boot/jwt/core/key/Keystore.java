@@ -6,7 +6,7 @@ public interface Keystore {
 
     Key getPublicKey();
 
-    Key getAppPublicKey(String instanceId);
+    Key getAppPublicKey(AppMetadata appMetadata);
 
     Key getPrivateKey();
 }

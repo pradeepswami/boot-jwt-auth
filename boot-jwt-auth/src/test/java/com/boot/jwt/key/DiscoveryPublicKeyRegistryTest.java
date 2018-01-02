@@ -1,5 +1,6 @@
 package com.boot.jwt.key;
 
+import com.boot.jwt.core.key.AppMetadata;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class DiscoveryPublicKeyRegistryTest {
     public void getPublicKey_typical() throws Exception {
         Mockito.when(mockDiscoveryClient.getInstances(APP_ID)).thenReturn(Arrays.asList(createInstance()));
 
-        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(INSTANCE_ID);
+        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(new AppMetadata(APP_ID, INSTANCE_ID));
 
         assertThat(rstKey, notNullValue());
         assertThat(rstKey.getAlgorithm(), equalTo("RSA"));
@@ -45,7 +46,7 @@ public class DiscoveryPublicKeyRegistryTest {
     public void getPublicKey_emptyInstance() throws Exception {
         Mockito.when(mockDiscoveryClient.getInstances(APP_ID)).thenReturn(Collections.EMPTY_LIST);
 
-        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(INSTANCE_ID);
+        PublicKey rstKey = discoveryPublicKeyRegistry.getPublicKey(new AppMetadata(APP_ID, INSTANCE_ID));
 
         assertThat(rstKey, nullValue());
     }

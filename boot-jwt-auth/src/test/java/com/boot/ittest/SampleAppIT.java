@@ -5,9 +5,10 @@ import com.boot.jwt.security.JwtAuthenticationFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,21 +20,20 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(SampleApp.class)
-@WebIntegrationTest({"server.port=21212"})
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = {SampleApp.class})
 @ActiveProfiles("test")
 public class SampleAppIT {
 
-    private static final String LOCAL_HOST = "http://localhost:21212";
+    @LocalServerPort
+    private int port;
 
-    private static final String HELLO_REQUSET = LOCAL_HOST + "/hello";
     @Autowired
     private JJwtServiceImpl JJwtServiceImpl;
 
     @Test
     public void requestWithoutToken() throws Exception {
         RestTemplate restTemplate = new TestRestTemplate();
-        ResponseEntity<String> rst = restTemplate.getForEntity(HELLO_REQUSET, String.class);
+        ResponseEntity<String> rst = restTemplate.getForEntity(getHostUrl() + "/hello", String.class);
         assertThat(rst.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
     }
 
@@ -46,7 +46,7 @@ public class SampleAppIT {
 
         RestTemplate restTemplate = new TestRestTemplate();
 
-        ResponseEntity<String> rst = restTemplate.exchange(HELLO_REQUSET, HttpMethod.GET, new HttpEntity<>(headers),
+        ResponseEntity<String> rst = restTemplate.exchange(getHostUrl() + "/hello", HttpMethod.GET, new HttpEntity<>(headers),
                 String.class);
 
         assertThat(rst.getStatusCode(), equalTo(HttpStatus.OK));
@@ -61,7 +61,7 @@ public class SampleAppIT {
 
         RestTemplate restTemplate = new TestRestTemplate();
 
-        ResponseEntity<String> rst = restTemplate.exchange(HELLO_REQUSET, HttpMethod.GET, new HttpEntity<>(headers),
+        ResponseEntity<String> rst = restTemplate.exchange(getHostUrl() + "/hello", HttpMethod.GET, new HttpEntity<>(headers),
                 String.class);
 
         assertThat(rst.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
@@ -70,9 +70,13 @@ public class SampleAppIT {
     @Test
     public void requestWithoutToken_unsecureResource() throws Exception {
         RestTemplate restTemplate = new TestRestTemplate();
-        ResponseEntity<String> rst = restTemplate.getForEntity(LOCAL_HOST + "/unsecure/hello", String.class);
+        ResponseEntity<String> rst = restTemplate.getForEntity(getHostUrl() + "/unsecure/hello", String.class);
         assertThat(rst.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat(rst.getBody(), equalTo("Hello! from SampleApp - Unsecure"));
     }
 
+
+    private String getHostUrl() {
+        return "http://localhost:" + port;
+    }
 }

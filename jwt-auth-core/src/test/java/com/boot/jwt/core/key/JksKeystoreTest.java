@@ -44,15 +44,16 @@ public class JksKeystoreTest {
 
     @Test
     public void getAppPublicKey_whenPublicKeyRegistryNotSet() throws Exception {
-        assertThat(testObject.getAppPublicKey(APP_ID), equalTo(testObject.getPublicKey()));
+        assertThat(testObject.getAppPublicKey(new AppMetadata(APP_ID, null)), equalTo(testObject.getPublicKey()));
     }
 
     @Test
     public void getAppPublicKey_withPublicKeyRegistry() throws Exception {
+        AppMetadata appMetadata = new AppMetadata(APP_ID, null);
         testObject.setPublicKeyRegistry(mockPublicRegistry);
-        testObject.getAppPublicKey(APP_ID);
+        testObject.getAppPublicKey(appMetadata);
 
-        verify(mockPublicRegistry).getPublicKey(APP_ID);
+        verify(mockPublicRegistry).getPublicKey(appMetadata);
 
     }
 

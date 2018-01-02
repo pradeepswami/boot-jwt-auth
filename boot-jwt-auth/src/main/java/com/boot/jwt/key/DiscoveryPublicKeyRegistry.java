@@ -1,5 +1,6 @@
 package com.boot.jwt.key;
 
+import com.boot.jwt.core.key.AppMetadata;
 import com.boot.jwt.core.key.PublicKeyRegistry;
 import io.jsonwebtoken.impl.TextCodec;
 import org.slf4j.Logger;
@@ -27,12 +28,12 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
     }
 
     @Override
-    public PublicKey getPublicKey(String instanceId) {
-        LOG.info("Getting public key for instance id -> {}", instanceId);
-        List<ServiceInstance> instances = discoveryClient.getInstances(instanceId);
+    public PublicKey getPublicKey(AppMetadata appMetadata) {
+        LOG.info("Getting public key for instance id -> {}", appMetadata);
+        List<ServiceInstance> instances = discoveryClient.getInstances(appMetadata.getAppName());
         PublicKey publicKey = null;
         Optional<ServiceInstance> firstItem = instances.stream()
-                .filter(ins -> ins.getServiceId().equalsIgnoreCase(instanceId))
+                .filter(ins -> ins.getServiceId().equalsIgnoreCase(appMetadata.getInstanceId()))
                 .findFirst();
 
         if (firstItem.isPresent()) {
@@ -43,7 +44,7 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
                 KeyFactory kf = KeyFactory.getInstance("RSA");
                 publicKey = kf.generatePublic(X509publicKey);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                LOG.error("Unable to extract public key for instance id " + instanceId, e);
+                LOG.error("Unable to extract public key for  " + appMetadata, e);
             }
         }
 

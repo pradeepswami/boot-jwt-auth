@@ -18,8 +18,9 @@ public class JksPublicKeyRegistryTest {
 
     @Test
     public void getPublicKey_test() throws Exception {
+        AppMetadata appMetadata = new AppMetadata(APP_INSTANCE_ID, APP_INSTANCE_ID);
         testObject = new JksPublicKeyRegistry(this.getClass().getResourceAsStream(SAMPLE_JKS), STORE_PASSWORD, ImmutableMap.of(APP_INSTANCE_ID, SAMPLE_ALIAS));
-        PublicKey appPublicKey = testObject.getPublicKey(APP_INSTANCE_ID);
+        PublicKey appPublicKey = testObject.getPublicKey(appMetadata);
 
         assertTrue(appPublicKey instanceof PublicKey);
 

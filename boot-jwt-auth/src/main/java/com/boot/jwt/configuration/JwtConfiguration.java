@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 @Configuration
 public class JwtConfiguration {
@@ -23,14 +23,15 @@ public class JwtConfiguration {
     @Bean
     @ConditionalOnMissingBean(JwtService.class)
     public JwtService jwtService() throws IOException {
-        InputStream inputStream = jwtAuthProperties.getKeyStore().getInputStream();
 
-        JksKeystore jksKeystore = new JksKeystore(inputStream,
+        Resource keyStoreResource = jwtAuthProperties.getKeyStore();
+
+        JksKeystore jksKeystore = new JksKeystore(keyStoreResource.getInputStream(),
                 jwtAuthProperties.getStorePasswordChar(),
                 jwtAuthProperties.getKeyPasswordChar(),
                 jwtAuthProperties.getAlias());
 
-        JksPublicKeyRegistry registry = new JksPublicKeyRegistry(inputStream,
+        JksPublicKeyRegistry registry = new JksPublicKeyRegistry(keyStoreResource.getInputStream(),
                 jwtAuthProperties.getStorePasswordChar(),
                 jwtAuthProperties.getTrustedAppKeys());
         jksKeystore.setPublicKeyRegistry(registry);

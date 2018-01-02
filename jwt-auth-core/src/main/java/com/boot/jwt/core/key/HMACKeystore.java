@@ -25,7 +25,7 @@ public class HMACKeystore implements Keystore {
     }
 
     @Override
-    public Key getAppPublicKey(String appInstanceId) {
+    public Key getAppPublicKey(AppMetadata appMetadata) {
         //TODO have a separate secret store
         return secretKey;
     }
