@@ -1,4 +1,4 @@
-package com.boot.ittest;
+package com.boot.jwt;
 
 import com.boot.jwt.core.JJwtServiceImpl;
 import com.boot.jwt.security.JwtAuthenticationFilter;
