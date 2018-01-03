@@ -1,4 +1,4 @@
 language: java
 jdk:
   - oraclejdk8
-mvn clean install
+mvn -f boot-jwt-auth-parent/pom.xml -Dmaven.javadoc.skip=true -B -V clean install
