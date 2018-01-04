@@ -20,7 +20,7 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(DiscoveryPublicKeyRegistry.class);
 
-    public static final String JWT_PUBLIC_KEY = "jwt-public-core";
+    public static final String JWT_PUBLIC_KEY = "jwt-publicKey";
     private DiscoveryClient discoveryClient;
 
     public DiscoveryPublicKeyRegistry(DiscoveryClient discoveryClient) {
