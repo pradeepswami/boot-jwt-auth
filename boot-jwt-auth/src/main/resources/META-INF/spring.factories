@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.boot.jwt.configuration.JwtAuthAutoConfiguration
+
+
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.boot.jwt.configuration.JwtEurekaAutoConfiguration

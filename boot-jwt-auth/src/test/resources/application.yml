@@ -3,13 +3,14 @@ spring:
     application:
         name: sampleapp
 
-auth.jwt:
+jwt.auth:
   appName: sampleapp
   keyStore: classpath:sample.jks
   storePassword: sample
   keyPassword: sample
   alias: sample
   algo: RSA
+  secret: 'XqLe/s1jnJBLnz8HoiBelfbY9H+qG0jouds5cAEKucc='
   trustedAppKeys:
     sampleapp: sample
   excludePaths: [ '/unsecure/**' ]    

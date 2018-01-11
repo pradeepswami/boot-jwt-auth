@@ -10,8 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@ConfigurationProperties(prefix = "auth.jwt")
+@ConfigurationProperties(prefix = "jwt.auth")
 public class JwtAuthProperties {
+
+    public enum Algo {RSA, HMAC}
+
+    ;
 
     private String appName;
     private String instanceId;
@@ -19,11 +23,12 @@ public class JwtAuthProperties {
     private String storePassword;
     private String keyPassword;
     private String alias;
-    private String algo;
+    private Algo algo = Algo.HMAC;
     private int expSeconds = 120;
     private boolean enabled = true;
     private List<String> excludePaths = new ArrayList<>();
     private Map<String, String> trustedAppKeys = new HashMap<String, String>();
+    private String secret;
 
     public String getAppName() {
         return appName;
@@ -73,14 +78,6 @@ public class JwtAuthProperties {
         this.alias = alias;
     }
 
-    public String getAlgo() {
-        return algo;
-    }
-
-    public void setAlgo(String algo) {
-        this.algo = algo;
-    }
-
     public Map<String, String> getTrustedAppKeys() {
         return trustedAppKeys;
     }
@@ -123,5 +120,21 @@ public class JwtAuthProperties {
 
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
+    }
+
+    public Algo getAlgo() {
+        return algo;
+    }
+
+    public void setAlgo(Algo algo) {
+        this.algo = algo;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }

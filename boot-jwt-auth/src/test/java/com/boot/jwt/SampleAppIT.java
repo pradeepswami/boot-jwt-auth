@@ -76,6 +76,37 @@ public class SampleAppIT {
     }
 
 
+    @Test
+    public void requestWithValidToken2() throws Exception {
+        String token = JJwtServiceImpl.generateToken(Collections.emptyMap());
+        System.err.println(token);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JwtAuthenticationFilter.AUTHORIZATION, JwtAuthenticationFilter.BEARER + token);
+
+        RestTemplate restTemplate = new TestRestTemplate();
+
+        ResponseEntity<String> rst = restTemplate.exchange(getHostUrl() + "/hello2", HttpMethod.GET, new HttpEntity<>(headers),
+                String.class);
+
+        assertThat(rst.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(rst.getBody(), equalTo("Hello! from SampleApp"));
+    }
+
+    @Test
+    public void requestWithExpiredToken2() throws Exception {
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJzYW1wbGVhcHAiLCJpYXQiOjE0ODM3ODI4MDksImV4cCI6MTQ4Mzc4MjkyOSwic3ViIjoic2FtcGxlYXBwIn0.cuvEjI-KnoLZyJ2Xbx5zScTebBdifK1miHic1Bcs04uXSArC-WyMGcAJhe7Q-D6B2Q9OGXFZBcnMPnKj4_z9QOIJOUCmnBB2AGKrdvbVidvtrmNfQ9wlY6mVBj8BffPIn40dfAX_sKuCqUpskHClRz3ifxaETCJJbPimYyJTfK_mGOC3_gmSOIE3tFROlcnWS1IwSphoqCDcdr_uajoRZ84EWOdFb_6K7lhY5K59rmcb45ErrwoeDx1RekBK_ZzS8TouRFX6vGITmWQ-hfnKQJEwY_3FCRR3EcZCQWczk0G1lDMZs-wniG9v54EjlXl0BdRXzs9V64oQVEcir3kySA";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JwtAuthenticationFilter.AUTHORIZATION, JwtAuthenticationFilter.BEARER + token);
+
+        RestTemplate restTemplate = new TestRestTemplate();
+
+        ResponseEntity<String> rst = restTemplate.exchange(getHostUrl() + "/uns/hello", HttpMethod.GET, new HttpEntity<>(headers),
+                String.class);
+
+        assertThat(rst.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
+    }
+
+
     private String getHostUrl() {
         return "http://localhost:" + port;
     }

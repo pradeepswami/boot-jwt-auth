@@ -1,15 +1,15 @@
 package com.boot.jwt.configuration;
 
+import org.springframework.context.annotation.Import;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.context.annotation.Import;
-
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import({ JwtSecurityConfiguration.class, JwtAuthProperties.class })
+@Import({JwtSecurityConfigAdapter.class, JwtAuthProperties.class})
 public @interface EnableJwtAuthentication {
 
 }

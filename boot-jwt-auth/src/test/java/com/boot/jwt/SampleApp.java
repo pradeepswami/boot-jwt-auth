@@ -29,6 +29,12 @@ public class SampleApp {
             return "Hello! from SampleApp - Unsecure";
         }
 
+        @RequestMapping("/hello2")
+        public String hello2() {
+            System.err.println("In hello2");
+            return "Hello! from SampleApp";
+        }
+
     }
 
 }

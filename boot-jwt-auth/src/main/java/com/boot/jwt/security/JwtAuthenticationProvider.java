@@ -17,6 +17,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private JwtService jwtService;
 
+    public JwtAuthenticationProvider(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.isInstanceOf(JwtAuthenticationToken.class, authentication);
@@ -44,7 +48,4 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     }
 
-    public void setJwtService(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
 }

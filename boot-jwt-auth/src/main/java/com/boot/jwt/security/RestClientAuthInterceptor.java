@@ -1,6 +1,6 @@
 package com.boot.jwt.security;
 
-import com.boot.jwt.core.JJwtServiceImpl;
+import com.boot.jwt.core.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -16,7 +16,7 @@ import java.util.Collections;
 public class RestClientAuthInterceptor implements ClientHttpRequestInterceptor {
 
     @Autowired
-    private JJwtServiceImpl JJwtServiceImpl;
+    private JwtService JJwtServiceImpl;
 
     public static final String AUTH_HEADER = "Authorization";
 
