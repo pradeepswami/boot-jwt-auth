@@ -3,7 +3,6 @@ package com.boot.jwt.configuration;
 import com.boot.jwt.core.JJwtServiceImpl;
 import com.boot.jwt.core.JwtService;
 import com.boot.jwt.core.key.*;
-import com.boot.jwt.security.RestClientAuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,6 +15,7 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 
 @Configuration
+@ConditionalOnProperty(value = "jwt.auth.enabled", havingValue = "true", matchIfMissing = true)
 public class JwtAuthAutoConfiguration {
 
     @Autowired
@@ -80,15 +80,10 @@ public class JwtAuthAutoConfiguration {
 
     }
 
-    @Bean
-    public RestClientAuthInterceptor restClientAuthInterceptor() {
-        return new RestClientAuthInterceptor();
-    }
-
     public static class JKSAvailableCondition extends ResourceCondition {
 
         protected JKSAvailableCondition() {
-            super("JWTAuth", "jwt.auth", "keyStore", new String[]{});
+            super("JWtAuth", "jwt.auth", "keyStore", new String[]{});
         }
     }
 

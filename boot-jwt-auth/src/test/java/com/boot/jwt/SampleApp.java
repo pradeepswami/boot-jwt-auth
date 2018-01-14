@@ -14,6 +14,7 @@ public class SampleApp {
         SpringApplication.run(SampleApp.class, args);
     }
 
+
     @RestController
     public static class HelloController {
 

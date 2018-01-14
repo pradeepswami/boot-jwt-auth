@@ -29,6 +29,7 @@ public class JwtAuthProperties {
     private List<String> excludePaths = new ArrayList<>();
     private Map<String, String> trustedAppKeys = new HashMap<String, String>();
     private String secret;
+    private boolean generateKeypair;
 
     public String getAppName() {
         return appName;
@@ -136,5 +137,13 @@ public class JwtAuthProperties {
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public boolean isGenerateKeypair() {
+        return generateKeypair;
+    }
+
+    public void setGenerateKeypair(boolean generateKeypair) {
+        this.generateKeypair = generateKeypair;
     }
 }

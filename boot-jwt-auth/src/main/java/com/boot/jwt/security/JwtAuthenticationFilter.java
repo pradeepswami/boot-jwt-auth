@@ -1,98 +1,93 @@
 package com.boot.jwt.security;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.boot.jwt.configuration.JwtAuthProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.boot.jwt.configuration.JwtAuthProperties;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-@Component
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-	public static final String BEARER = "Bearer ";
+    public static final String BEARER = "Bearer ";
 
-	public static final String AUTHORIZATION = "Authorization";
+    public static final String AUTHORIZATION = "Authorization";
 
-	private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
-	@Autowired
-	private JwtAuthProperties jwtAuthProperties;
+    private JwtAuthProperties jwtAuthProperties;
 
-	private RequestMatcher excludePath;
+    private FilterChain filterChain;
 
-	public JwtAuthenticationFilter() {
-		super("/**");
-		setAuthenticationSuccessHandler(new NoOpAuthSuccessHandler());
-	}
+    private RequestMatcher excludePath;
 
-	@PostConstruct
-	public void init() {
-		List<String> excludePaths = jwtAuthProperties.getExcludePaths();
-		if (!CollectionUtils.isEmpty(excludePaths)) {
-			LOG.debug("adding {} to exclude path", excludePaths);
-			excludePath = this.generateExcludeMatcher(excludePaths);
-		}
-	}
+    public JwtAuthenticationFilter(JwtAuthProperties jwtAuthProperties) {
+        super("/**");
+        setAuthenticationSuccessHandler(new NoOpAuthSuccessHandler());
+        this.jwtAuthProperties = jwtAuthProperties;
+    }
 
-	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException, IOException, ServletException {
+    @Deprecated
+    void init() {
+        List<String> excludePaths = jwtAuthProperties.getExcludePaths();
+        if (!CollectionUtils.isEmpty(excludePaths)) {
+            LOG.debug("adding {} to exclude path", excludePaths);
+            excludePath = this.generateExcludeMatcher(excludePaths);
+        }
+    }
 
-		String authHeader = request.getHeader(AUTHORIZATION);
-		String jwt = StringUtils.substringAfter(authHeader, BEARER);
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        filterChain = chain;
+        super.doFilter(req, res, chain);
+    }
 
-		JwtAuthenticationToken authRequest = new JwtAuthenticationToken(jwt);
-		return getAuthenticationManager().authenticate(authRequest);
-	}
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException, IOException, ServletException {
 
-	@Autowired
-	@Override
-	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-		super.setAuthenticationManager(authenticationManager);
-	}
+        String authHeader = request.getHeader(AUTHORIZATION);
+        String jwt = StringUtils.substringAfter(authHeader, BEARER);
 
-	protected RequestMatcher generateExcludeMatcher(List<String> excludePath) {
-		List<RequestMatcher> nrm = new ArrayList<RequestMatcher>();
-		for (String path : excludePath) {
-			nrm.add(new AntPathRequestMatcher(path));
-		}
-		return new OrRequestMatcher(nrm);
-	}
+        JwtAuthenticationToken authRequest = new JwtAuthenticationToken(jwt);
+        return getAuthenticationManager().authenticate(authRequest);
+    }
 
-	@Override
-	protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-		if (excludePath != null && excludePath.matches(request)) {
-			return false;
-		}
-		return super.requiresAuthentication(request, response);
-	}
+    protected RequestMatcher generateExcludeMatcher(List<String> excludePath) {
+        List<RequestMatcher> nrm = new ArrayList<RequestMatcher>();
+        for (String path : excludePath) {
+            nrm.add(new AntPathRequestMatcher(path));
+        }
+        return new OrRequestMatcher(nrm);
+    }
 
-	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-			FilterChain chain, Authentication authResult) throws IOException, ServletException {
-		// call super to update auth in context
-		super.successfulAuthentication(request, response, chain, authResult);
-		chain.doFilter(request, response);
-	}
+    @Override
+    protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        String authHeader = request.getHeader(AUTHORIZATION);
+        return (authHeader != null && authHeader.startsWith(BEARER));
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        // call super to update auth in context
+        super.successfulAuthentication(request, response, chain, authResult);
+        chain.doFilter(request, response);
+    }
 
 }
