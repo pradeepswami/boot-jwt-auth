@@ -7,7 +7,7 @@
     <artifactId>boot-jwt-auth-sample</artifactId>
     <packaging>jar</packaging>
 
-    <name>boot-jwt-auth</name>
+    <name>boot-jwt-auth-sample</name>
     <description>sample app</description>
 
     <parent>
