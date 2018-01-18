@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -42,14 +41,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         this.jwtAuthProperties = jwtAuthProperties;
     }
 
-    @Deprecated
-    void init() {
-        List<String> excludePaths = jwtAuthProperties.getExcludePaths();
-        if (!CollectionUtils.isEmpty(excludePaths)) {
-            LOG.debug("adding {} to exclude path", excludePaths);
-            excludePath = this.generateExcludeMatcher(excludePaths);
-        }
-    }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

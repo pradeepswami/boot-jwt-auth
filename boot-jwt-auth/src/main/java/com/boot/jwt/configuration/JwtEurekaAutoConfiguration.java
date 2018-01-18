@@ -12,13 +12,11 @@ import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 @Configuration
 @ConditionalOnClass({EurekaInstanceConfigBean.class})
 @AutoConfigureBefore({EurekaClientAutoConfiguration.class, JwtAuthAutoConfiguration.class})
-@Import(JwtSecurityConfigAdapter.class)
 public class JwtEurekaAutoConfiguration {
 
     @Autowired

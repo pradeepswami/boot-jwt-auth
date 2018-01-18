@@ -2,14 +2,10 @@ package com.boot.jwt.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Component
 @ConfigurationProperties(prefix = "jwt.auth")
 public class JwtAuthProperties {
 
@@ -25,11 +21,11 @@ public class JwtAuthProperties {
     private String alias;
     private Algo algo = Algo.HMAC;
     private int expSeconds = 120;
-    private boolean enabled = true;
-    private List<String> excludePaths = new ArrayList<>();
+    private boolean enabled;
     private Map<String, String> trustedAppKeys = new HashMap<String, String>();
     private String secret;
     private boolean generateKeypair;
+    private String[] excludePath;
 
     public String getAppName() {
         return appName;
@@ -99,13 +95,6 @@ public class JwtAuthProperties {
         this.expSeconds = expSeconds;
     }
 
-    public List<String> getExcludePaths() {
-        return excludePaths;
-    }
-
-    public void setExcludePaths(List<String> excludePaths) {
-        this.excludePaths = excludePaths;
-    }
 
     public boolean isEnabled() {
         return enabled;
@@ -145,5 +134,13 @@ public class JwtAuthProperties {
 
     public void setGenerateKeypair(boolean generateKeypair) {
         this.generateKeypair = generateKeypair;
+    }
+
+    public String[] getExcludePath() {
+        return excludePath;
+    }
+
+    public void setExcludePath(String[] excludePath) {
+        this.excludePath = excludePath;
     }
 }

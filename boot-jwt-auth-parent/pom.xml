@@ -28,6 +28,7 @@
     <modules>
         <module>../boot-jwt-auth</module>
         <module>../jwt-auth-core</module>
+        <module>../boot-jwt-auth-sample</module>
     </modules>
     <dependencyManagement>
         <dependencies>

@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.boot.auth.jwt</groupId>
-    <artifactId>boot-jwt-auth</artifactId>
+    <artifactId>boot-jwt-auth-sample</artifactId>
     <packaging>jar</packaging>
 
     <name>boot-jwt-auth</name>
-    <description>Demo project for Spring Boot</description>
+    <description>sample app</description>
 
     <parent>
         <groupId>com.boot.auth.jwt</groupId>
@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.boot.auth.jwt</groupId>
-            <artifactId>jwt-auth-core</artifactId>
+            <artifactId>boot-jwt-auth</artifactId>
             <version>${parent.version}</version>
         </dependency>
 
@@ -32,7 +32,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

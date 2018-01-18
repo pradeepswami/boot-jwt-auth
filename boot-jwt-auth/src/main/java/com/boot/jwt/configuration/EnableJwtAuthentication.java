@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import({JwtSecurityConfigAdapter.class, JwtAuthProperties.class})
+@Import({JwtAuthProperties.class})
 public @interface EnableJwtAuthentication {
 
 }

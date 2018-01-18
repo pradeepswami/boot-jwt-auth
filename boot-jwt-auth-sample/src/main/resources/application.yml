@@ -1,7 +1,6 @@
 spring:
-    profiles: test
     application:
-        name: sampleapp
+        name: @project.artifactId@
 
 jwt.auth:
   appName: sampleapp
@@ -14,4 +13,4 @@ jwt.auth:
   secret: 'XqLe/s1jnJBLnz8HoiBelfbY9H+qG0jouds5cAEKucc='
   trustedAppKeys:
     sampleapp: sample
-  excludePath: ['/unsecure/**']
+  excludePath: ['/hello/**']

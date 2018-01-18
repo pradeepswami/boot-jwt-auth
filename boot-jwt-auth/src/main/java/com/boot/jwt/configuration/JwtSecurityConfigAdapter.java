@@ -3,24 +3,23 @@ package com.boot.jwt.configuration;
 import com.boot.jwt.core.JwtService;
 import com.boot.jwt.security.JwtAuthenticationFilter;
 import com.boot.jwt.security.JwtAuthenticationProvider;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//@EnableWebSecurity
-@Configuration
-@ConditionalOnProperty(value = "jwt.auth.enabled", havingValue = "true", matchIfMissing = true)
-public class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
+public abstract class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    private final static Logger LOG = LoggerFactory.getLogger(JwtSecurityConfigAdapter.class);
+
+    private JwtAuthProperties jwtAuthProperties;
     private JwtService jwtService;
 
-    @Autowired
-    private JwtAuthProperties jwtAuthProperties;
 
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(jwtAuthProperties);
@@ -36,14 +35,27 @@ public class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        JwtAuthProperties jwtAuthProperties = this.getApplicationContext().getBean(JwtAuthProperties.class);
         // formatter:off
-        http
+        HttpSecurity httpSecurity = http
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .httpBasic().disable()
-                .csrf().disable()
-                .authorizeRequests().antMatchers("/unsecure/**").permitAll()
-                .anyRequest().authenticated();
+                .csrf().disable();
+        String[] excludePath = jwtAuthProperties.getExcludePath();
+        if (ArrayUtils.isNotEmpty(excludePath)) {
+            LOG.info("Adding exclude path -> {}", StringUtils.join(excludePath, ","));
+            httpSecurity.authorizeRequests()
+                    .antMatchers(excludePath).permitAll();
+        }
+        httpSecurity.authorizeRequests().anyRequest().authenticated();
         // formatter:on
     }
 
+    public void setJwtAuthProperties(JwtAuthProperties jwtAuthProperties) {
+        this.jwtAuthProperties = jwtAuthProperties;
+    }
+
+    public void setJwtService(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
 }
