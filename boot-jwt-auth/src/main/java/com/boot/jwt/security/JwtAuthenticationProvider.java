@@ -17,6 +17,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private JwtService jwtService;
 
+    private JwtClaimManager jwtClaimManager = new DefaultJwtClaimManager();
+
     public JwtAuthenticationProvider(JwtService jwtService) {
         this.jwtService = jwtService;
     }
@@ -38,7 +40,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     }
 
     JwtAuthenticationToken createAuthentication(Jwt<Header, Claims> token, String jwtStr) {
-        JwtAuthenticationToken jwt = new JwtAuthenticationToken(token.getBody().getId(), jwtStr);
+        JwtAuthenticationToken jwt = new JwtAuthenticationToken(jwtClaimManager.getPrincipal(token), jwtStr);
         return jwt;
     }
 
@@ -48,4 +50,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     }
 
+    public JwtClaimManager getJwtClaimManager() {
+        return jwtClaimManager;
+    }
 }

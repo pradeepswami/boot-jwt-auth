@@ -5,7 +5,7 @@ spring:
 jwt.auth:
   appName: sampleapp
   keyStore: classpath:sample.jks
-  enabled: false
+  enabled: true
   storePassword: sample
   keyPassword: sample
   alias: sample

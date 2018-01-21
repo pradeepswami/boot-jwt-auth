@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.io.IOException;
@@ -76,6 +77,11 @@ public class JwtAuthConfiguration {
 
     @EnableWebSecurity
     public static class JwtSecurityConfigAdapterImpl extends JwtSecurityConfigAdapter {
+
+        @Override
+        public void configure(AuthenticationManagerBuilder auth) throws Exception {
+            super.configure(auth);
+        }
 
         @Autowired
         @Override
