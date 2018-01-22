@@ -3,10 +3,12 @@ package com.boot.jwt.configuration;
 import com.boot.jwt.core.JwtService;
 import com.boot.jwt.security.JwtAuthenticationFilter;
 import com.boot.jwt.security.JwtAuthenticationProvider;
+import com.boot.jwt.security.JwtClaimManager;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,6 +31,13 @@ public abstract class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdap
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtService);
+        JwtClaimManager jwtClaimManager = null;
+        try {
+            jwtClaimManager = this.getApplicationContext().getBean(JwtClaimManager.class);
+            provider.setJwtClaimManager(jwtClaimManager);
+        } catch (NoSuchBeanDefinitionException e) {
+            LOG.debug("No bean of type JwtClaimManager found. Fall back to default");
+        }
         auth.authenticationProvider(provider);
     }
 

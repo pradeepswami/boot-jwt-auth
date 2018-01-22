@@ -9,7 +9,7 @@ jwt.auth:
   storePassword: sample
   keyPassword: sample
   alias: sample
-  algo: RSA
+  algo: HMAC
   secret: 'XqLe/s1jnJBLnz8HoiBelfbY9H+qG0jouds5cAEKucc='
   trustedAppKeys:
     sampleapp: sample

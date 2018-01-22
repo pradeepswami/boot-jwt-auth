@@ -1,12 +1,10 @@
 package com.boot.jwt;
 
-import com.boot.jwt.configuration.EnableJwtAuthentication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@EnableJwtAuthentication
 @SpringBootApplication
 public class SampleApp {
 

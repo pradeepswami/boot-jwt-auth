@@ -70,7 +70,11 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String authHeader = request.getHeader(AUTHORIZATION);
-        return (authHeader != null && authHeader.startsWith(BEARER));
+        boolean rst = authHeader != null && authHeader.startsWith(BEARER);
+        if (!rst) {
+            LOG.debug("Skipping JwtAuthentication for url {}", request.getRequestURI());
+        }
+        return rst;
     }
 
     @Override

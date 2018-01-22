@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.Assert;
 
+import java.util.Objects;
+
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final static Logger LOG = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
@@ -50,7 +52,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     }
 
-    public JwtClaimManager getJwtClaimManager() {
-        return jwtClaimManager;
+    public void setJwtClaimManager(JwtClaimManager jwtClaimManager) {
+        if (Objects.isNull(jwtClaimManager)) {
+            LOG.warn("Trying set with null JwtClaimManager. Fall back to default JwtClaimManager");
+            return;
+        }
+        this.jwtClaimManager = jwtClaimManager;
     }
 }
