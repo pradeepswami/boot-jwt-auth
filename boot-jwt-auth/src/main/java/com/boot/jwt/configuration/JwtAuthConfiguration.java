@@ -1,17 +1,17 @@
 package com.boot.jwt.configuration;
 
+import com.boot.jwt.actuator.JwtAuthEndpoint;
+import com.boot.jwt.configuration.condition.JwtJksAvailableCondition;
 import com.boot.jwt.core.JJwtServiceImpl;
 import com.boot.jwt.core.JwtService;
 import com.boot.jwt.core.key.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ResourceCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class JwtAuthConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(Keystore.class)
-        @Conditional(JKSAvailableCondition.class)
+        @Conditional(JwtJksAvailableCondition.class)
         public Keystore jksKeystore(JwtAuthProperties jwtAuthProperties) throws IOException {
 
             Resource keyStoreResource = jwtAuthProperties.getKeyStore();
@@ -74,20 +74,14 @@ public class JwtAuthConfiguration {
 
     }
 
+    @Bean
+    public JwtAuthEndpoint jwtAuthEndpoint(Keystore keystore) {
+        return new JwtAuthEndpoint(keystore);
+    }
+
 
     @EnableWebSecurity
     public static class JwtSecurityConfigAdapterImpl extends JwtSecurityConfigAdapter {
-
-        @Override
-        public void configure(AuthenticationManagerBuilder auth) throws Exception {
-            super.configure(auth);
-        }
-
-        @Autowired
-        @Override
-        public void setJwtAuthProperties(JwtAuthProperties jwtAuthProperties) {
-            super.setJwtAuthProperties(jwtAuthProperties);
-        }
 
         @Autowired
         @Override
@@ -96,12 +90,5 @@ public class JwtAuthConfiguration {
         }
     }
 
-
-    public static class JKSAvailableCondition extends ResourceCondition {
-
-        protected JKSAvailableCondition() {
-            super("JWtAuth", "jwt.auth", "keyStore", new String[]{});
-        }
-    }
 
 }

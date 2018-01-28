@@ -14,7 +14,7 @@ import java.util.Collections;
 public class SampleController {
 
 
-    @Autowired
+    @Autowired(required = false)
     private JwtService jwtService;
 
 

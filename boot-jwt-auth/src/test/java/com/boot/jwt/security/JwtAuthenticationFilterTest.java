@@ -9,9 +9,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-
-import java.util.Arrays;
 
 import static com.boot.jwt.security.JwtAuthenticationFilter.AUTHORIZATION;
 import static com.boot.jwt.security.JwtAuthenticationFilter.BEARER;
@@ -29,20 +26,6 @@ public class JwtAuthenticationFilterTest {
     public void setUp() throws Exception {
     }
 
-    @Test
-    public void testGenerateMatcher() throws Exception {
-
-        MockHttpServletRequest request = new MockHttpServletRequest();
-
-        RequestMatcher requestMatcher = testObject.generateExcludeMatcher(Arrays.asList("/info", "/**/app/**"));
-        request.setServletPath("/info");
-        assertTrue(requestMatcher.matches(request));
-        request.setServletPath("/app");
-        assertTrue(requestMatcher.matches(request));
-        request.setServletPath("/test");
-        assertFalse(requestMatcher.matches(request));
-
-    }
 
     @Test
     public void requiresAuthentication_Typical() throws Exception {

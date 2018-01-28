@@ -18,12 +18,11 @@ public abstract class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdap
 
     private final static Logger LOG = LoggerFactory.getLogger(JwtSecurityConfigAdapter.class);
 
-    private JwtAuthProperties jwtAuthProperties;
     private JwtService jwtService;
 
 
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(jwtAuthProperties);
+        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter();
         authenticationFilter.setAuthenticationManager(this.authenticationManagerBean());
         return authenticationFilter;
     }
@@ -59,9 +58,6 @@ public abstract class JwtSecurityConfigAdapter extends WebSecurityConfigurerAdap
         // formatter:on
     }
 
-    public void setJwtAuthProperties(JwtAuthProperties jwtAuthProperties) {
-        this.jwtAuthProperties = jwtAuthProperties;
-    }
 
     public void setJwtService(JwtService jwtService) {
         this.jwtService = jwtService;

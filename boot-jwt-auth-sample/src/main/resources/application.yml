@@ -5,12 +5,14 @@ spring:
 jwt.auth:
   appName: sampleapp
   keyStore: classpath:sample.jks
-  enabled: true
+  enabled: false
   storePassword: sample
   keyPassword: sample
   alias: sample
-  algo: HMAC
+  algo: RSA
   secret: 'XqLe/s1jnJBLnz8HoiBelfbY9H+qG0jouds5cAEKucc='
   trustedAppKeys:
     sampleapp: sample
-  excludePath: ['/hello/**']
+  excludePath: ['/hello/**', '/_manage/**']
+
+management.context-path: /_manage

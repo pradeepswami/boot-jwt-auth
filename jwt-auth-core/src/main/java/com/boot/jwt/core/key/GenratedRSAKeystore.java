@@ -1,5 +1,6 @@
 package com.boot.jwt.core.key;
 
+import io.jsonwebtoken.impl.TextCodec;
 import io.jsonwebtoken.impl.crypto.RsaProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,10 @@ public class GenratedRSAKeystore implements Keystore {
     @Override
     public PrivateKey getPrivateKey() {
         return generateKeyPair.getPrivate();
+    }
+
+    public String getPublicKeyBase64() {
+        return TextCodec.BASE64URL.encode(getPublicKey().getEncoded());
     }
 
     public void init() {
