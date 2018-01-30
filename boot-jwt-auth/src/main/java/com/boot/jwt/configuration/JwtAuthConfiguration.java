@@ -81,6 +81,7 @@ public class JwtAuthConfiguration {
 
 
     @EnableWebSecurity
+    @ConditionalOnProperty(prefix = "jwt.auth", name = "mode", havingValue = "server", matchIfMissing = true)
     public static class JwtSecurityConfigAdapterImpl extends JwtSecurityConfigAdapter {
 
         @Autowired
