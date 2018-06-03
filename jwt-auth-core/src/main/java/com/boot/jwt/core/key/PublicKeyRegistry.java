@@ -5,4 +5,6 @@ import java.security.PublicKey;
 public interface PublicKeyRegistry {
 
     PublicKey getPublicKey(AppMetadata appMetadata);
+
+    boolean hasKey(AppMetadata appMetadata);
 }

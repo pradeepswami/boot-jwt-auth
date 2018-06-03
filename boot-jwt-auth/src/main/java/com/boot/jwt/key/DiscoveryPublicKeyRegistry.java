@@ -50,4 +50,10 @@ public class DiscoveryPublicKeyRegistry implements PublicKeyRegistry {
 
         return publicKey;
     }
+
+    @Override
+    public boolean hasKey(AppMetadata appMetadata) {
+        List<ServiceInstance> instances = discoveryClient.getInstances(appMetadata.getAppName());
+        return !instances.isEmpty();
+    }
 }

@@ -5,6 +5,8 @@ import com.boot.jwt.configuration.condition.JwtJksAvailableCondition;
 import com.boot.jwt.core.JJwtServiceImpl;
 import com.boot.jwt.core.JwtService;
 import com.boot.jwt.core.key.*;
+import com.boot.jwt.key.MultiSourcePublicKeyResolver;
+import io.jsonwebtoken.SigningKeyResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,8 +30,13 @@ public class JwtAuthConfiguration {
                 .instanceId(jwtAuthProperties.getInstanceId())
                 .algo(jwtAuthProperties.getAlgo().name())
                 .keystore(keystore)
-                .signingKeyResolver(new JwtSigningKeyResolver(keystore))
+                .signingKeyResolver(signingKeyResolver())
                 .build();
+    }
+
+    @Bean
+    public SigningKeyResolver signingKeyResolver() {
+        return new MultiSourcePublicKeyResolver();
     }
 
     @Configuration
@@ -63,15 +70,18 @@ public class JwtAuthConfiguration {
                     jwtAuthProperties.getKeyPasswordChar(),
                     jwtAuthProperties.getAlias());
 
-            JksPublicKeyRegistry registry = new JksPublicKeyRegistry(keyStoreResource.getInputStream(),
-                    jwtAuthProperties.getStorePasswordChar(),
-                    jwtAuthProperties.getTrustedAppKeys());
-            jksKeystore.setPublicKeyRegistry(registry);
-
             return jksKeystore;
         }
 
-
+        @Bean
+        @Conditional(JwtJksAvailableCondition.class)
+        public PublicKeyRegistry jksPublicKeyRegistry(JwtAuthProperties jwtAuthProperties) throws IOException {
+            Resource keyStoreResource = jwtAuthProperties.getKeyStore();
+            JksPublicKeyRegistry jksKeystore = new JksPublicKeyRegistry(keyStoreResource.getInputStream(),
+                    jwtAuthProperties.getStorePasswordChar(),
+                    jwtAuthProperties.getTrustedAppKeys());
+            return jksKeystore;
+        }
     }
 
     @Bean

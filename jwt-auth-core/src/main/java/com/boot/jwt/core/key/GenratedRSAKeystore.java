@@ -21,23 +21,11 @@ public class GenratedRSAKeystore implements Keystore {
     public GenratedRSAKeystore() {
     }
 
-    public GenratedRSAKeystore(PublicKeyRegistry publicKeyRegistry) {
-        this.publicKeyRegistry = publicKeyRegistry;
-    }
-
     @Override
     public PublicKey getPublicKey() {
         return generateKeyPair.getPublic();
     }
 
-    @Override
-    public PublicKey getAppPublicKey(AppMetadata appMetadata) {
-        if (publicKeyRegistry == null) {
-            LOG.warn("No PublicKeyRegistry registered");
-            return null;
-        }
-        return publicKeyRegistry.getPublicKey(appMetadata);
-    }
 
     @Override
     public PrivateKey getPrivateKey() {

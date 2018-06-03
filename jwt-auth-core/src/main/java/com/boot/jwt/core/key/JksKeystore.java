@@ -14,7 +14,6 @@ public class JksKeystore implements Keystore {
 
     private Key privateKey;
     private Key publicKey;
-    private PublicKeyRegistry publicKeyRegistry;
 
     public JksKeystore(InputStream keystore, char[] storePassword, char[] keyPassword, String alias) {
         LOG.info("Constructing jks keystore with alias {}", alias);
@@ -35,21 +34,10 @@ public class JksKeystore implements Keystore {
         return publicKey;
     }
 
-    @Override
-    public Key getAppPublicKey(AppMetadata appMetadata) {
-        if (this.publicKeyRegistry == null) {
-            LOG.warn("Public Key Registry is not set. Using JksKeystore public key");
-            return publicKey;
-        }
-        return publicKeyRegistry.getPublicKey(appMetadata);
-    }
 
     @Override
     public Key getPrivateKey() {
         return privateKey;
     }
 
-    public void setPublicKeyRegistry(PublicKeyRegistry publicKeyRegistry) {
-        this.publicKeyRegistry = publicKeyRegistry;
-    }
 }

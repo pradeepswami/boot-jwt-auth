@@ -18,6 +18,7 @@ public class JwtAuthProperties {
     private String appName;
     private String instanceId;
     private Resource keyStore;
+    private boolean generateKeystore = true;
     private String storePassword;
     private String keyPassword;
     private String alias;
@@ -144,5 +145,13 @@ public class JwtAuthProperties {
 
     public void setExcludePath(String[] excludePath) {
         this.excludePath = excludePath;
+    }
+
+    public boolean isGenerateKeystore() {
+        return generateKeystore;
+    }
+
+    public void setGenerateKeystore(boolean generateKeystore) {
+        this.generateKeystore = generateKeystore;
     }
 }

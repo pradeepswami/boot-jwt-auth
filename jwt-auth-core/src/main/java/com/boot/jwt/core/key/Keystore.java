@@ -6,7 +6,5 @@ public interface Keystore {
 
     Key getPublicKey();
 
-    Key getAppPublicKey(AppMetadata appMetadata);
-
     Key getPrivateKey();
 }

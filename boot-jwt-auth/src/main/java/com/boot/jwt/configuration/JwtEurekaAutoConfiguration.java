@@ -1,8 +1,8 @@
 package com.boot.jwt.configuration;
 
-import com.boot.jwt.configuration.condition.JwtJksOnMissingCondition;
 import com.boot.jwt.core.key.GenratedRSAKeystore;
 import com.boot.jwt.core.key.Keystore;
+import com.boot.jwt.core.key.PublicKeyRegistry;
 import com.boot.jwt.key.DiscoveryPublicKeyRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -13,7 +13,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
@@ -36,18 +35,23 @@ public class JwtEurekaAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(Keystore.class)
-    @Conditional(JwtJksOnMissingCondition.class)
-    public Keystore generatedKeystore(DiscoveryClient discoveryClient) {
+    @ConditionalOnProperty(prefix = "jwt.auth", name = "generateKeystore", havingValue = "true", matchIfMissing = true)
+    public Keystore generatedKeystore() {
 
-        DiscoveryPublicKeyRegistry keyRegistry = new DiscoveryPublicKeyRegistry(discoveryClient);
-        GenratedRSAKeystore genratedRSAKeystore = new GenratedRSAKeystore(keyRegistry);
+        GenratedRSAKeystore genratedRSAKeystore = new GenratedRSAKeystore();
         genratedRSAKeystore.init();
 
         Properties properties = new Properties();
         properties.setProperty(EUREKA_PUBLIC_KEY, genratedRSAKeystore.getPublicKeyBase64());
         environment.getPropertySources().addFirst(new PropertiesPropertySource(JWT_EUREKA_SOURCE, properties));
-
         return genratedRSAKeystore;
     }
+
+    @Bean
+    public PublicKeyRegistry publicKeyRegistry(DiscoveryClient discoveryClient) {
+        DiscoveryPublicKeyRegistry keyRegistry = new DiscoveryPublicKeyRegistry(discoveryClient);
+        return keyRegistry;
+    }
+
 }
 

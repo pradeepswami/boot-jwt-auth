@@ -12,7 +12,6 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 
 public class JwtJksAvailableCondition extends SpringBootCondition {
 
-    public static final String CONDITION_NAME = "JWTAuthJks";
     public static final String CONDITION_PREFIX = "jwt.auth.";
     public static final String PROPERTY_NAME = "keyStore";
 

@@ -9,10 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JksKeystoreTest {
@@ -42,19 +39,5 @@ public class JksKeystoreTest {
         assertTrue(testObject.getPrivateKey() instanceof PrivateKey);
     }
 
-    @Test
-    public void getAppPublicKey_whenPublicKeyRegistryNotSet() throws Exception {
-        assertThat(testObject.getAppPublicKey(new AppMetadata(APP_ID, null)), equalTo(testObject.getPublicKey()));
-    }
-
-    @Test
-    public void getAppPublicKey_withPublicKeyRegistry() throws Exception {
-        AppMetadata appMetadata = new AppMetadata(APP_ID, null);
-        testObject.setPublicKeyRegistry(mockPublicRegistry);
-        testObject.getAppPublicKey(appMetadata);
-
-        verify(mockPublicRegistry).getPublicKey(appMetadata);
-
-    }
 
 }
