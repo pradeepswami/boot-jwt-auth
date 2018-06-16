@@ -16,8 +16,6 @@ public class GenratedRSAKeystore implements Keystore {
     public static final int KEY_SIZE_IN_BITS = 2048;
     private KeyPair generateKeyPair;
 
-    private PublicKeyRegistry publicKeyRegistry;
-
     public GenratedRSAKeystore() {
     }
 
@@ -37,6 +35,7 @@ public class GenratedRSAKeystore implements Keystore {
     }
 
     public void init() {
+        LOG.info("Generating RSA pair key.");
         generateKeyPair = RsaProvider.generateKeyPair(KEY_SIZE_IN_BITS);
     }
 
